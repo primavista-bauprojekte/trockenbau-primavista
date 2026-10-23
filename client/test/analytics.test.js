@@ -217,15 +217,17 @@ test('delegated contact tracking handles nested links and cleans up without chan
     }
   };
   const cleanup = registerContactClickTracking(target);
+  click('tel:+4917648747554');
+  click('tel:+4915789818308');
   click('tel:+41782659332');
-  click('https://wa.me/491793596697?text=private%20message');
+  click('https://wa.me/4917648747554?text=private%20message');
   for (const href of ['/anfrage', 'mailto:private@example.com', 'https://wa.me.evil.example/123', 'http://wa.me/123']) {
     click(href);
   }
   click('tel:+41782659332', { defaultPrevented: true });
   click('tel:+41782659332', { button: 1 });
-  assert.deepEqual(ga4Events().map(([, , parameters]) => parameters.contact_method), ['phone', 'whatsapp']);
-  assert.doesNotMatch(JSON.stringify(events()), /41782659332|491793596697|private|wa\.me/);
+  assert.deepEqual(ga4Events().map(([, , parameters]) => parameters.contact_method), ['phone', 'phone', 'phone', 'whatsapp']);
+  assert.doesNotMatch(JSON.stringify(events()), /4917648747554|4915789818308|41782659332|private|wa\.me/);
   cleanup();
   assert.equal(listeners.size, 0);
   const secondCleanup = registerContactClickTracking(target);

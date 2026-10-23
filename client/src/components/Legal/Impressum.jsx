@@ -1,3 +1,5 @@
+import { businessProfile } from '../../config/businessProfile';
+
 function Impressum() {
   return (
     <article className="legal-page__card" aria-labelledby="impressum-title">
@@ -32,12 +34,14 @@ function Impressum() {
             trockenbau-primavista.ch
           </a>
         </p>
-        <p className="legal-page__paragraph">
-          Telefon:{' '}
-          <a href="tel:+41782659332" className="legal-page__link">
-            +41 78 265 93 32
-          </a>
-        </p>
+        {businessProfile.contactPhones.map((contact) => (
+          <p key={contact.id} className="legal-page__paragraph">
+            {contact.label}:{' '}
+            <a href={contact.href} className="legal-page__link">
+              {contact.display}
+            </a>
+          </p>
+        ))}
       </div>
 
       <div className="legal-page__block">

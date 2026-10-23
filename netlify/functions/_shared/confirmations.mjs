@@ -1,8 +1,9 @@
+import { contactPhones, contactPhoneText } from '../../../shared/contact.js';
+
 export const ALLOWED_FORM_NAMES = ['contact', 'calculator', 'anfrage'];
 
 const COMPANY_NAME = 'Trockenbau PrimaVista Schweiz';
 const COMPANY_EMAIL = 'info@trockenbau-primavista.ch';
-const COMPANY_PHONE = '+41 78 265 93 32';
 
 export class ConfirmationRequestError extends Error {
   constructor(status, message) {
@@ -31,6 +32,10 @@ const escapeHtml = (value) =>
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+
+const companyPhoneHtml = contactPhones
+  .map((contact) => `${escapeHtml(contact.label)}: <a href="${contact.href}">${escapeHtml(contact.display)}</a>`)
+  .join('<br>');
 
 export const normalizeSubmission = (submission) => {
   if (!submission || typeof submission !== 'object' || Array.isArray(submission)) {
@@ -195,7 +200,7 @@ const getTemplates = (formName, submission) => {
             <table style="border-collapse:collapse;margin:24px 0;width:100%;max-width:680px;">
               ${buildSummaryMarkup(summary)}
             </table>
-            <p>Bei Rueckfragen antworten Sie einfach auf diese E-Mail oder rufen Sie uns an: <a href="tel:${COMPANY_PHONE.replaceAll(' ', '')}">${COMPANY_PHONE}</a>.</p>
+            <p>Bei Rueckfragen antworten Sie einfach auf diese E-Mail oder rufen Sie uns an:<br>${companyPhoneHtml}</p>
             <p>Freundliche Gruesse<br>${COMPANY_NAME}</p>
           </div>
         `,
@@ -207,7 +212,7 @@ const getTemplates = (formName, submission) => {
           '',
           buildSummaryText(summary),
           '',
-          `Rueckfragen: ${COMPANY_EMAIL} | ${COMPANY_PHONE}`,
+          `Rueckfragen: ${COMPANY_EMAIL} | ${contactPhoneText}`,
         ].join('\n'),
       },
       internal: {
@@ -243,7 +248,7 @@ const getTemplates = (formName, submission) => {
             <table style="border-collapse:collapse;margin:24px 0;width:100%;max-width:680px;">
               ${buildSummaryMarkup(summary)}
             </table>
-            <p>Falls Sie weitere Informationen ergaenzen moechten, antworten Sie einfach auf diese E-Mail oder kontaktieren Sie uns direkt unter <a href="tel:${COMPANY_PHONE.replaceAll(' ', '')}">${COMPANY_PHONE}</a>.</p>
+            <p>Falls Sie weitere Informationen ergaenzen moechten, antworten Sie einfach auf diese E-Mail oder kontaktieren Sie uns direkt:<br>${companyPhoneHtml}</p>
             <p>Freundliche Gruesse<br>${COMPANY_NAME}</p>
           </div>
         `,
@@ -255,7 +260,7 @@ const getTemplates = (formName, submission) => {
           '',
           buildSummaryText(summary),
           '',
-          `Rueckfragen: ${COMPANY_EMAIL} | ${COMPANY_PHONE}`,
+          `Rueckfragen: ${COMPANY_EMAIL} | ${contactPhoneText}`,
         ].join('\n'),
       },
       internal: {
@@ -291,6 +296,7 @@ const getTemplates = (formName, submission) => {
             ${buildSummaryMarkup(summary)}
           </table>
           <p>Sie koennen bei Rueckfragen jederzeit direkt auf diese E-Mail antworten oder uns unter <a href="mailto:${COMPANY_EMAIL}">${COMPANY_EMAIL}</a> erreichen.</p>
+          <p>${companyPhoneHtml}</p>
           <p>Freundliche Gruesse<br>${COMPANY_NAME}</p>
         </div>
       `,
@@ -303,7 +309,7 @@ const getTemplates = (formName, submission) => {
         '',
         buildSummaryText(summary),
         '',
-        `Rueckfragen: ${COMPANY_EMAIL} | ${COMPANY_PHONE}`,
+        `Rueckfragen: ${COMPANY_EMAIL} | ${contactPhoneText}`,
       ].join('\n'),
     },
     internal: {

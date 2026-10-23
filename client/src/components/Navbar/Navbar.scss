@@ -1,6 +1,7 @@
 @use '../../styles/z-index' as z;
 
 .navbar {
+  --navbar-contact-height: 44px;
   position: sticky;
   top: 0;
   z-index: z.$z-navbar;
@@ -21,6 +22,28 @@
   gap: clamp(24px, 2vw, 44px);
   max-width: var(--pv-shell);
   padding-inline: var(--pv-shell-gutter);
+}
+
+.navbar__primary-phone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: var(--navbar-contact-height);
+  padding-inline: 16px;
+  border-top: 1px solid var(--color-border-soft);
+  color: var(--color-text-primary);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.navbar__primary-phone strong {
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+.navbar__primary-phone:hover {
+  color: var(--color-accent);
 }
 
 .navbar__brand {
@@ -195,12 +218,12 @@
 
 .navbar__mobile {
   position: fixed;
-  top: var(--pv-header-height);
+  top: calc(var(--pv-header-height) + var(--navbar-contact-height));
   right: 0;
   left: 0;
   z-index: z.$z-navbar + 1;
-  height: calc(100dvh - var(--pv-header-height));
-  max-height: calc(100dvh - var(--pv-header-height));
+  height: calc(100dvh - var(--pv-header-height) - var(--navbar-contact-height));
+  max-height: calc(100dvh - var(--pv-header-height) - var(--navbar-contact-height));
   display: none;
   flex-direction: column;
   overflow-y: auto;
@@ -393,9 +416,10 @@
   margin-top: 12px;
   color: var(--color-text-muted);
   font-family: var(--font-display);
-  font-size: 9px;
+  padding-block: 8px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.04em;
   line-height: 1.5;
   text-align: center;
   text-decoration: none;
@@ -466,9 +490,9 @@
   }
 
   .navbar__mobile {
-    top: 78px;
-    height: calc(100dvh - 78px);
-    max-height: calc(100dvh - 78px);
+    top: calc(78px + var(--navbar-contact-height));
+    height: calc(100dvh - 78px - var(--navbar-contact-height));
+    max-height: calc(100dvh - 78px - var(--navbar-contact-height));
   }
 }
 

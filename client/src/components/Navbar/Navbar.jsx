@@ -226,6 +226,15 @@ function Navbar({ isHomePage = true, currentPath = '/' }) {
         </button>
       </div>
 
+      <a
+        href={businessProfile.phoneHref}
+        className="navbar__primary-phone"
+        aria-label={`${businessProfile.contactPhones[0].label}: ${businessProfile.phone}`}
+      >
+        <span>Hauptkontakt</span>
+        <strong>{businessProfile.phone}</strong>
+      </a>
+
       <div
         id="navbar-mobile-menu"
         className={`navbar__mobile ${menuOpen ? 'is-open' : ''}${isInstantClosing ? ' is-instant' : ''}`}
@@ -283,9 +292,11 @@ function Navbar({ isHomePage = true, currentPath = '/' }) {
             </Button>
           </div>
 
-          <a href="tel:+41782659332" className="navbar__mobile-phone">
-            oder direkt anrufen · +41 78 265 93 32
-          </a>
+          {businessProfile.contactPhones.map((contact) => (
+            <a key={contact.id} href={contact.href} className="navbar__mobile-phone">
+              {contact.label}<br />{contact.display}
+            </a>
+          ))}
         </nav>
       </div>
     </header>

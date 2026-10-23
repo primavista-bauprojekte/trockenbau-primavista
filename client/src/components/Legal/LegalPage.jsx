@@ -3,6 +3,7 @@ import './Legal.scss';
 import Impressum from './Impressum';
 import PrivacyPolicy from './PrivacyPolicy';
 import useScrollReveal from '../../hooks/useScrollReveal';
+import { businessProfile } from '../../config/businessProfile';
 
 const legalPages = [
   { key: 'impressum', href: '/impressum', label: 'Impressum' },
@@ -86,9 +87,11 @@ function LegalPage({ page = 'impressum' }) {
             <a href="mailto:info@trockenbau-primavista.ch" className="legal-page__summary-link">
               info@trockenbau-primavista.ch
             </a>
-            <a href="tel:+41782659332" className="legal-page__summary-link">
-              +41 78 265 93 32
-            </a>
+            {businessProfile.contactPhones.map((contact) => (
+              <a key={contact.id} href={contact.href} className="legal-page__summary-link">
+                {contact.label}<br />{contact.display}
+              </a>
+            ))}
           </aside>
         </div>
 

@@ -56,6 +56,21 @@ const okResendResponse = (id = 'resend-id') =>
 const failResendResponse = (status = 500, message = 'boom') =>
   new Response(message, { status });
 
+const assertContactPhones = (email) => {
+  const expected = [
+    ['Hauptkontakt (Deutschland)', '+49 176 48747554', '+4917648747554'],
+    ['Alternativer Kontakt (Sonja)', '+49 1578 9818308', '+4915789818308'],
+    ['Kontakt Schweiz', '+41 78 265 93 32', '+41782659332'],
+  ];
+  let previousIndex = -1;
+  for (const [label, display, international] of expected) {
+    const index = email.html.indexOf(`${label}: <a href="tel:${international}">${display}</a>`);
+    assert.ok(index > previousIndex, `${label} must have a matching call link in priority order`);
+    assert.ok(email.text.includes(`${label}: ${display}`));
+    previousIndex = index;
+  }
+};
+
 // Silence the expected console output from confirmations.mjs during tests.
 const silenceConsole = () => {
   const originalLog = console.log;
@@ -187,6 +202,7 @@ test('sends both customer confirmation and internal notification when fully conf
     assert.match(customerCall.body.html, /Trockenbau PrimaVista Schweiz/);
     assert.match(customerCall.body.text, /Anna Beispiel/);
     assert.match(customerCall.body.text, /Trockenbau PrimaVista Schweiz/);
+    assertContactPhones(customerCall.body);
 
     // Internal notification: From rewritten with customer name + form label;
     // Reply-To set to the customer's address so replies go straight back.
@@ -372,6 +388,7 @@ test('calculator form renders calculator-specific subject and totals', async () 
       'Ihre Kalkulator-Anfrage bei Trockenbau PrimaVista Schweiz',
     );
     assert.match(customerCall.body.html, /CHF 1’234\.50/);
+    assertContactPhones(customerCall.body);
     assert.match(internalCall.body.subject, /Neue Kalkulator-Anfrage von Max Muster/);
     assert.equal(internalCall.body.from, 'Max Muster via Kalkulator <hello@trockenbau-primavista.ch>');
   } finally {
@@ -402,7 +419,8 @@ test('anfrage form uses Anfrage label in internal From and subject', async () =>
       },
     });
 
-    const [, internalCall] = mock.calls;
+    const [customerCall, internalCall] = mock.calls;
+    assertContactPhones(customerCall.body);
     assert.match(internalCall.body.subject, /Neue Anfrage \(Assistent\) von Lea Bau/);
     assert.equal(internalCall.body.from, 'Lea Bau via Anfrage <hello@trockenbau-primavista.ch>');
   } finally {
