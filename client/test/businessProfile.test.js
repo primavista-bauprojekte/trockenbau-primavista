@@ -8,7 +8,7 @@ test('business profile keeps the public brand separate from the legal entity', (
   assert.equal(businessProfile.legalName, 'Prima Vista B&G GmbH');
   assert.equal(businessProfile.serviceLine, 'Trockenbau • Innenausbau • Renovationen');
   assert.equal(businessProfile.slogan, 'Präzision. Qualität. Zeitloses Design.');
-  assert.equal(businessProfile.whatsapp, 'https://wa.me/491793596697');
+  assert.equal(businessProfile.whatsapp, 'https://wa.me/4917648747554');
   assert.equal(businessProfile.instagram, 'https://www.instagram.com/trockenbau_primavista.ch/');
   assert.equal(
     businessProfile.contactHours,
@@ -18,6 +18,20 @@ test('business profile keeps the public brand separate from the legal entity', (
     businessProfile.appointmentNote,
     'Persönliche Beratungen und Termine erfolgen nach Vereinbarung.',
   );
+});
+
+test('contact links prioritize the owner, retain Sonja and preserve the Swiss number', () => {
+  assert.equal(businessProfile.phone, '+49 176 48747554');
+  assert.equal(businessProfile.phoneHref, 'tel:+4917648747554');
+  assert.deepEqual(businessProfile.contactPhones.map(({ display, href }) => [display, href]), [
+    ['+49 176 48747554', 'tel:+4917648747554'],
+    ['+49 1578 9818308', 'tel:+4915789818308'],
+    ['+41 78 265 93 32', 'tel:+41782659332'],
+  ]);
+  assert.equal(localBusinessSchema.telephone, '+4917648747554');
+  assert.deepEqual(localBusinessSchema.contactPoint.map(({ telephone }) => telephone), [
+    '+4917648747554', '+4915789818308', '+41782659332',
+  ]);
 });
 
 test('website service areas preserve all 22 configured locations without duplicates', () => {

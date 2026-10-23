@@ -9,12 +9,12 @@ import FormErrorMessage from '../FormErrorMessage/FormErrorMessage';
 import { businessProfile } from '../../config/businessProfile';
 
 const contactItems = [
-  {
+  ...businessProfile.contactPhones.map((contact) => ({
     icon: Phone,
-    label: 'Telefon',
-    value: businessProfile.phone,
-    href: businessProfile.phoneHref,
-  },
+    label: contact.label,
+    value: contact.display,
+    href: contact.href,
+  })),
   {
     icon: Mail,
     label: 'E-Mail',
@@ -28,7 +28,7 @@ const contactItems = [
   },
   {
     icon: MessageCircle,
-    label: 'WhatsApp',
+    label: 'WhatsApp · Hauptkontakt',
     value: 'Jetzt schreiben',
     href: businessProfile.whatsapp,
   },

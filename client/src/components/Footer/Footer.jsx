@@ -113,10 +113,15 @@ function Footer({ isHomePage = true }) {
                 <span className="footer__link-icon" aria-hidden="true">CH</span>
                 <span>Spinnereistrasse 5, 6020 Emmenbrücke, Schweiz</span>
               </span>
-              <a href="tel:+41782659332" className="footer__link">
-                <span className="footer__link-icon" aria-hidden="true">☎</span>
-                <span>+41 78 265 93 32</span>
-              </a>
+              {businessProfile.contactPhones.map((contact) => (
+                <a key={contact.id} href={contact.href} className="footer__link">
+                  <span className="footer__link-icon" aria-hidden="true">☎</span>
+                  <span>
+                    <small className="footer__phone-label">{contact.label}</small>
+                    {contact.display}
+                  </span>
+                </a>
+              ))}
               <a href="mailto:info@trockenbau-primavista.ch" className="footer__link">
                 <span className="footer__link-icon" aria-hidden="true">@</span>
                 <span>info@trockenbau-primavista.ch</span>

@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { contactPhoneText, primaryWhatsApp } from '../../../shared/contact.js';
 
 let openaiClient = null;
 const CHAT_MODEL = process.env.OPENAI_CHAT_MODEL || 'gpt-5.6-luna';
@@ -20,7 +21,7 @@ const getOpenAIClient = () => {
 const systemMessage = {
   role: 'system',
   content:
-    `You are a helpful assistant for ${CHAT_BUSINESS_NAME}, operated by Prima Vista B&G GmbH in Emmenbruecke, Switzerland. Answer in German. Be concise, professional, and guide users toward contacting the company for quotes or project inquiries. Core services are Trockenbau, Innenausbau and Renovationen. The main service area is Luzern and Central Switzerland, with projects also accepted in Zurich and the surrounding area. Personal consultations and appointments are by prior arrangement.`,
+    `You are a helpful assistant for ${CHAT_BUSINESS_NAME}, operated by Prima Vista B&G GmbH in Emmenbruecke, Switzerland. Answer in German. Be concise, professional, and guide users toward contacting the company for quotes or project inquiries. Core services are Trockenbau, Innenausbau and Renovationen. The main service area is Luzern and Central Switzerland, with projects also accepted in Zurich and the surrounding area. Personal consultations and appointments are by prior arrangement. Contact details, in priority order: ${contactPhoneText}. Offer the primary German business contact first; Sonja is the alternative contact. Keep the existing Swiss contact available without assigning it to a person. WhatsApp for the primary contact: ${primaryWhatsApp}. Do not invent other phone numbers.`,
 };
 
 export class ChatRequestError extends Error {

@@ -257,7 +257,12 @@ function BrandRail({ onClose }) {
       </div>
 
       <address className="chatbot-rail__contact">
-        <a href="tel:+41782659332"><Phone aria-hidden="true" /> +41 78 265 93 32</a>
+        {businessProfile.contactPhones.map((contact) => (
+          <a key={contact.id} href={contact.href}>
+            <Phone aria-hidden="true" />
+            <span className="chatbot-rail__phone-text">{contact.label}<br />{contact.display}</span>
+          </a>
+        ))}
         <a href="mailto:info@trockenbau-primavista.ch"><Mail aria-hidden="true" /> info@trockenbau-primavista.ch</a>
         <span><MapPin aria-hidden="true" /> Emmenbrücke · Schweiz</span>
       </address>
@@ -410,10 +415,10 @@ function Chatbot() {
     } catch {
       setMessages((prev) => [
         ...prev,
-        createMessage(
-          'assistant',
-          'Der Chat ist momentan nicht verfügbar. Bitte kontaktieren Sie uns direkt unter info@trockenbau-primavista.ch oder +41 78 265 93 32.',
-        ),
+        {
+          ...createMessage('assistant', 'Der Chat ist momentan nicht verfügbar. Bitte kontaktieren Sie uns direkt:'),
+          contactFallback: true,
+        },
       ]);
     } finally {
       setLoading(false);
@@ -517,6 +522,16 @@ function Chatbot() {
                   {msg.role === 'assistant' ? <Avatar /> : null}
                   <div className="chatbot-message__bubble">
                     {msg.content}
+                    {msg.contactFallback ? (
+                      <div className="chatbot-message__contacts">
+                        {businessProfile.contactPhones.map((contact) => (
+                          <a key={contact.id} href={contact.href}>
+                            {contact.label}<br />{contact.display}
+                          </a>
+                        ))}
+                        <a href={`mailto:${businessProfile.email}`}>{businessProfile.email}</a>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               ))}

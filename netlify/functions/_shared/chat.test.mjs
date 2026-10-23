@@ -23,6 +23,11 @@ test('Luna chat preserves the output budget and supports explicit model override
     assert.equal('max_tokens' in requests[0], false);
     assert.equal('temperature' in requests[0], false);
     assert.equal(requests[0].messages.at(-1).content, 'Hallo');
+    const systemPrompt = requests[0].messages[0].content;
+    assert.ok(systemPrompt.includes('Hauptkontakt (Deutschland): +49 176 48747554'));
+    assert.ok(systemPrompt.includes('Alternativer Kontakt (Sonja): +49 1578 9818308'));
+    assert.ok(systemPrompt.includes('Kontakt Schweiz: +41 78 265 93 32'));
+    assert.ok(systemPrompt.includes('https://wa.me/4917648747554'));
     process.env.OPENAI_CHAT_MODEL = 'gpt-4o-mini';
     const override = await import('./chat.mjs?test=override');
     await override.buildChatReply([{ role: 'user', content: 'Hallo' }]);

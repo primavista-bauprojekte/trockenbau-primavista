@@ -1,12 +1,15 @@
+import { contactPhones, primaryContact, primaryWhatsApp } from '../../../shared/contact.js';
+
 export const businessProfile = Object.freeze({
   publicName: 'Trockenbau PrimaVista Schweiz',
   legalName: 'Prima Vista B&G GmbH',
   serviceLine: 'Trockenbau • Innenausbau • Renovationen',
   slogan: 'Präzision. Qualität. Zeitloses Design.',
   email: 'info@trockenbau-primavista.ch',
-  phone: '+41 78 265 93 32',
-  phoneHref: 'tel:+41782659332',
-  whatsapp: 'https://wa.me/491793596697',
+  phone: primaryContact.display,
+  phoneHref: primaryContact.href,
+  contactPhones,
+  whatsapp: primaryWhatsApp,
   instagram: 'https://www.instagram.com/trockenbau_primavista.ch/',
   website: 'https://trockenbau-primavista.ch/',
   contactHours: 'Mo–Fr 08:00–17:00 · Sa nach Vereinbarung · So geschlossen',
@@ -56,7 +59,12 @@ export const localBusinessSchema = Object.freeze({
   url: businessProfile.website,
   logo: `${businessProfile.website}pwa-512x512.png`,
   email: businessProfile.email,
-  telephone: businessProfile.phone,
+  telephone: primaryContact.international,
+  contactPoint: contactPhones.map((contact) => ({
+    '@type': 'ContactPoint',
+    contactType: contact.label,
+    telephone: contact.international,
+  })),
   sameAs: [businessProfile.instagram],
   address: {
     '@type': 'PostalAddress',
